@@ -21,10 +21,16 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user) {
-      if (user.role === "admin") {
-        router.push("/admin-dashboard");
-      } else if (user.role === "manager") {
-        router.push("/manager-dashboard");
+      let role = "";
+      if (Array.isArray(user.role)) {
+        role = user.role[0]?.trim().toLowerCase() || "";
+      } else if (typeof user.role === "string") {
+        role = user.role.trim().toLowerCase();
+      }
+      if (role === "admin") {
+        router.push("/dashboard/admin-dashboard");
+      } else if (role === "manager") {
+        router.push("/dashboard/manager-dashboard");
       } else {
         router.push("/dashboard");
       }
@@ -76,6 +82,7 @@ export default function LoginPage() {
 
       <div>
         <form className="mx-auto max-w-sm" onSubmit={handleSubmit}>
+        <h2 className="text-5xl font-bold text-center py-5">LogIn</h2>
           <div className="mb-5">
             <label
               htmlFor="email"
@@ -143,3 +150,4 @@ export default function LoginPage() {
     </>
   );
 }
+

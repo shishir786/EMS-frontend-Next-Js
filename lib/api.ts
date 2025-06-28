@@ -6,6 +6,7 @@ export async function signup(data: {
   name: string;
   email: string;
   password: string;
+  role?: string | string[];
 }) {
   const res = await axios.post(`${API_URL}/users/signup`, data, {
     headers: { "Content-Type": "application/json" },
@@ -100,10 +101,25 @@ export async function getLeaveById(id: string, token: string) {
   return res.data;
 }
 
-export async function approveLeave(id: string, token: string) {
+export async function approveLeave(
+  id: string,
+  token: string,
+  status: string = "APPROVED",
+) {
   const res = await axios.patch(
     `${API_URL}/leave/${id}/approve`,
-    {},
+    { status },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+  return res.data;
+}
+
+export async function rejectLeave(id: string, token: string) {
+  const res = await axios.patch(
+    `${API_URL}/leave/${id}/approve`,
+    { status: "REJECTED" },
     {
       headers: { Authorization: `Bearer ${token}` },
     },
@@ -118,12 +134,41 @@ export async function deleteLeave(id: string, token: string) {
   return res.data;
 }
 
-// Timesheets APIs
-export async function createTimesheet(data: any, token: string) {
-  const res = await axios.post(`${API_URL}/timesheets/create`, data, {
+export async function getAllLeaves(token: string) {
+  const res = await axios.get(`${API_URL}/leave/all`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
+}
+
+// Timesheets APIs
+export async function createTimesheet(data: any, token: string) {
+  // console.log("createTimesheet called with:", { data, token: token ? "exists" : "missing" });
+  // console.log("API URL:", `${API_URL}/timesheets/create`);
+  // console.log("Token (first 20 chars):", token ? token.substring(0, 20) + "..." : "no token");
+  // console.log("Headers:", {
+  //   "Content-Type": "application/json",
+  //   Authorization: `Bearer ${token}`,
+  // });
+
+  try {
+    const res = await axios.post(`${API_URL}/timesheets/create`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log("createTimesheet success:", res.data);
+    return res.data;
+  } catch (error: any) {
+    // console.error("createTimesheet error details:", {
+    //   status: error.response?.status,
+    //   statusText: error.response?.statusText,
+    //   data: error.response?.data,
+    //   headers: error.response?.headers,
+    // });
+    throw error;
+  }
 }
 
 export async function getAllTimesheets(token: string) {
@@ -169,6 +214,84 @@ export async function exportTimesheetsExcel(
 
 export async function getMyTimesheets(token: string) {
   const res = await axios.get(`${API_URL}/timesheets`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export async function updateTimesheetStatus(
+  timesheetId: string,
+  status: "pending" | "completed",
+  token: string,
+) {
+  const res = await axios.patch(
+    `${API_URL}/timesheets/${timesheetId}/status`,
+    { status },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return res.data;
+}
+
+export async function updateUserRole(
+  id: string,
+  roles: string[],
+  token: string,
+) {
+  const res = await axios.patch(
+    `${API_URL}/users/${id}/role`,
+    { role: roles },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return res.data;
+}
+
+// Notice APIs
+export async function getAllNotices(token: string) {
+  const res = await axios.get(`${API_URL}/notice`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export async function getNoticeById(id: string, token: string) {
+  const res = await axios.get(`${API_URL}/notice/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export async function createNotice(data: any, token: string) {
+  const res = await axios.post(`${API_URL}/notice`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+}
+
+export async function updateNotice(id: string, data: any, token: string) {
+  const res = await axios.patch(`${API_URL}/notice/${id}`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+}
+
+export async function deleteNotice(id: string, token: string) {
+  const res = await axios.delete(`${API_URL}/notice/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;

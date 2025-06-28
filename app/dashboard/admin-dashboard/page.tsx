@@ -9,16 +9,17 @@ import {
 
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getDashboardLink } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import RequireAuth from "../../components/RequireAuth";
-import { getAllNotices, getLeaves, getMyTimesheets, getProfileAxios } from "../../lib/api";
-import { useAuth } from "../../lib/auth-context";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import RequireAuth from "../../../components/RequireAuth";
+import { getAllLeaves, getAllNotices, getAllTimesheets, getAllUsers, getProfileAxios } from "../../../lib/api";
+import { useAuth } from "../../../lib/auth-context";
 
-export default function DashboardPage() {
+export default function AdminDashboardPage() {
   const { token, user } = useAuth();
-  const [profile, setProfile] = useState<Record<string, unknown> | null>(null);
+  const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userCount, setUserCount] = useState(0);
@@ -34,12 +35,13 @@ export default function DashboardPage() {
     setLoading(true);
     Promise.all([
       getProfileAxios(token),
-      getLeaves(token),
-      getMyTimesheets(token),
+      getAllUsers(token),
+      getAllLeaves(token),
+      getAllTimesheets(token),
     ])
-      .then(([profile, leaves, timesheets]) => {
+      .then(([profile, users, leaves, timesheets]) => {
         setProfile(profile);
-        setUserCount(1);
+        setUserCount(users.length);
         setLeaveCount(leaves.length);
         setTimesheetCount(timesheets.length);
       })
@@ -79,7 +81,7 @@ export default function DashboardPage() {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/dashboard">
+              <Link href={getDashboardLink(user)}>
                 Dashboard
               </Link>
             </BreadcrumbLink>
@@ -88,7 +90,7 @@ export default function DashboardPage() {
       </Breadcrumb>
 
       <div className="max-w-6xl mx-auto py-10 px-4">
-        <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
         <p className="mb-8 text-muted-foreground">
           Welcome{profile?.name ? `, ${profile.name}` : ""}! Here's an overview of your team and quick links.
         </p>
@@ -106,9 +108,9 @@ export default function DashboardPage() {
                   <Card className="border-blue-500">
                     <CardHeader>
                       <CardTitle>
-                        <span className="text-blue-500 mr-2">👤</span>Profile
+                        <span className="text-blue-500 mr-2">👥</span>Users
                       </CardTitle>
-                      <CardDescription>Your profile information</CardDescription>
+                      <CardDescription>Total registered users</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold text-center">{userCount}</div>
@@ -119,7 +121,7 @@ export default function DashboardPage() {
                       <CardTitle>
                         <span className="text-green-500 mr-2">🌿</span>Leaves
                       </CardTitle>
-                      <CardDescription>Your leave applications</CardDescription>
+                      <CardDescription>Total leave applications</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold text-center">{leaveCount}</div>
@@ -130,7 +132,7 @@ export default function DashboardPage() {
                       <CardTitle>
                         <span className="text-yellow-500 mr-2">🕒</span>Timesheets
                       </CardTitle>
-                      <CardDescription>Your timesheets submitted</CardDescription>
+                      <CardDescription>Total timesheets submitted</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold text-center">{timesheetCount}</div>
@@ -206,6 +208,15 @@ export default function DashboardPage() {
             </div>
             {/* Navigation Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <Link href="/notices">
+                <Card className="hover:shadow-lg transition cursor-pointer">
+                  <CardHeader>
+                    <CardTitle>
+                      <span className="mr-2">📢</span>Manage Notices
+                    </CardTitle>
+                  </CardHeader>
+                </Card>
+              </Link>
               <Link href="/change-pass">
                 <Card className="hover:shadow-lg transition cursor-pointer">
                   <CardHeader>
@@ -251,11 +262,29 @@ export default function DashboardPage() {
                   </CardHeader>
                 </Card>
               </Link>
-              <Link href="/leave/leave-history">
+              <Link href="/leave/leave-application">
                 <Card className="hover:shadow-lg transition cursor-pointer">
                   <CardHeader>
                     <CardTitle>
-                      <span className="mr-2">📄</span>Leave History
+                      <span className="mr-2">📄</span>Leave Application
+                    </CardTitle>
+                  </CardHeader>
+                </Card>
+              </Link>
+              <Link href="/signup/admin-signup">
+                <Card className="hover:shadow-lg transition cursor-pointer">
+                  <CardHeader>
+                    <CardTitle>
+                      <span className="mr-2">➕</span>Add People
+                    </CardTitle>
+                  </CardHeader>
+                </Card>
+              </Link>
+              <Link href="/users">
+                <Card className="hover:shadow-lg transition cursor-pointer">
+                  <CardHeader>
+                    <CardTitle>
+                      <span className="mr-2">👥</span>Users
                     </CardTitle>
                   </CardHeader>
                 </Card>

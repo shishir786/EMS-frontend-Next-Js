@@ -1,14 +1,29 @@
 "use client"
 
+import RequireAuth from "@/components/RequireAuth";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { createLeave } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
+import { getDashboardLink } from "@/lib/utils";
+import Link from "next/link";
 import React, { useState } from 'react';
-import RequireAuth from "../../components/RequireAuth";
-import { createLeave } from "../../lib/api";
-import { useAuth } from "../../lib/auth-context";
-
 const LeaveApply = () => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [form, setForm] = useState({
     type: '',
     startDate: '',
@@ -18,6 +33,7 @@ const LeaveApply = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -31,7 +47,8 @@ const LeaveApply = () => {
     try {
       if (!token) throw new Error('Not authenticated');
       await createLeave(form, token);
-      setSuccess('Leave application submitted successfully.');
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
       setForm({ type: '', startDate: '', endDate: '', reason: '' });
     } catch (err: any) {
       setError(err.message || 'Failed to apply for leave');
@@ -42,6 +59,45 @@ const LeaveApply = () => {
 
   return (
     <RequireAuth>
+
+      <Breadcrumb className="ml-5">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1">
+                <BreadcrumbEllipsis className="size-4" />
+                <span className="sr-only">Toggle menu</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem>Login</DropdownMenuItem>
+                {/* <DropdownMenuItem>Themes</DropdownMenuItem>
+                <DropdownMenuItem>GitHub</DropdownMenuItem> */}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href={getDashboardLink(user)}>
+                Dashboard
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/leave/leave-apply">leave-apply</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div className="mx-auto mt-10 max-w-lg rounded-lg bg-white dark:bg-gray-800 p-8 shadow-md">
         <h2 className="mb-6 text-2xl font-semibold text-center">Apply for Leave</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -85,7 +141,13 @@ const LeaveApply = () => {
             {loading ? 'Submitting...' : 'Apply'}
           </Button>
           {error && <div className="text-red-600 text-center font-medium">{error}</div>}
-          {success && <div className="text-green-600 text-center font-medium">{success}</div>}
+          {showToast && (
+            <div className="toast toast-end">
+              <div className="alert alert-success">
+                <span>Leave application submitted successfully!</span>
+              </div>
+            </div>
+          )}
         </form>
       </div>
     </RequireAuth>

@@ -1,6 +1,7 @@
-import { useAuth } from "../lib/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useAuth } from "../lib/auth-context";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function RequireAuth({
   children,
@@ -17,7 +18,7 @@ export default function RequireAuth({
   }, [user, loading, router]);
 
   if (loading || !user) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner text="Loading..." />;
   }
 
   return <>{children}</>;
