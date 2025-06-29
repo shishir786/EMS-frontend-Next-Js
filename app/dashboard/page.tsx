@@ -15,6 +15,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import RequireAuth from "../../components/RequireAuth";
 import { getAllNotices, getLeaves, getMyTimesheets, getProfileAxios } from "../../lib/api";
 import { useAuth } from "../../lib/auth-context";
+import { getDashboardLink } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { token, user } = useAuth();
@@ -79,7 +80,7 @@ export default function DashboardPage() {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/dashboard">
+              <Link href={getDashboardLink(user)}>
                 Dashboard
               </Link>
             </BreadcrumbLink>
@@ -90,8 +91,8 @@ export default function DashboardPage() {
       <div className="max-w-6xl mx-auto py-10 px-4">
         <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
         <p className="mb-8 text-muted-foreground">
-          Welcome{profile?.name ? `, ${profile.name}` : ""}! Here's an overview of your team and quick links.
-        </p>
+          `Welcome{profile?.name ? `, ${profile.name}` : ""}! Here's an overview of your team and quick links.
+</p>
         {loading ? (
           <LoadingSpinner text="Loading dashboard..." />
         ) : error ? (
