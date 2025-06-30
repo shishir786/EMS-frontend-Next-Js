@@ -280,6 +280,15 @@ export default function ManagerDashboardPage() {
                   </CardHeader>
                 </Card>
               </Link>
+              <Link href="/projects/manager-projects">
+                <Card className="hover:shadow-lg transition cursor-pointer">
+                  <CardHeader>
+                    <CardTitle>
+                      <span className="mr-2">👥</span>Projects
+                    </CardTitle>
+                  </CardHeader>
+                </Card>
+              </Link>
             </div>
           </>
         )}

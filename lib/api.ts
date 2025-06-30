@@ -296,3 +296,63 @@ export async function deleteNotice(id: string, token: string) {
   });
   return res.data;
 }
+
+// Project APIs
+export async function createProject(data: any, token: string) {
+  const res = await axios.post(`${API_URL}/projects`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+}
+
+export async function getAllProjects(token: string) {
+  const res = await axios.get(`${API_URL}/projects`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export async function getProjectById(id: string, token: string) {
+  const res = await axios.get(`${API_URL}/projects/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export async function updateProject(id: string, data: any, token: string) {
+  const res = await axios.patch(`${API_URL}/projects/${id}`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+}
+
+export async function deleteProject(id: string, token: string) {
+  const res = await axios.delete(`${API_URL}/projects/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export async function respondToProject(
+  projectId: string,
+  action: "accept" | "reject",
+  token: string,
+) {
+  const res = await axios.post(
+    `${API_URL}/projects/${projectId}/respond`,
+    { action },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return res.data;
+}
