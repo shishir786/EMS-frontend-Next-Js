@@ -20,7 +20,7 @@ A web-based employee management platform built with Next.js, React, and a RESTfu
 
 - Node.js (v18+ recommended)
 - npm or yarn
-- Backend API running (see API section below)
+- Backend API running (I build the backend using Nest Js)
 
 ### Installation
 
@@ -57,63 +57,136 @@ A web-based employee management platform built with Next.js, React, and a RESTfu
 - `lib/` — API utilities and authentication context
 - `hooks/` — Custom React hooks
 
-## API Overview
+```
+employee-manage/
+├── app/
+│   ├── change-pass/
+│   ├── dashboard/
+│   │   ├── admin-dashboard/
+│   │   ├── manager-dashboard/
+│   │   ├── edit-profile/
+│   │   ├── leave/
+│   │   │   ├── leave-application/
+│   │   │   ├── leave-apply/
+│   │   │   ├── leave-history/
+│   │   │   ├── login/
+│   │   │   ├── not-found.tsx
+│   │   │   ├── notices/
+│   │   │   ├── profile/
+│   │   │   ├── projects/
+│   │   │   │   ├── manager-projects/
+│   │   │   │   └── signup/
+│   │   │   │   └── admin-signup/
+│   │   │   └── timesheets/
+│   │   │   ├── users/
+│   │   │   ├── favicon.ico
+│   │   │   ├── globals.css
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   └── components/
+│   │       ├── app-sidebar.tsx
+│   │       ├── Footer.tsx
+│   │       ├── LoadingSpinner.tsx
+│   │       ├── login-form.tsx
+│   │       ├── Navbar.tsx
+│   │       ├── NavbarWrapper.tsx
+│   │       ├── RequireAuth.tsx
+│   │       └── ui/
+│   │           ├── alert-dialog.tsx
+│   │           ├── breadcrumb.tsx
+│   │           ├── button.tsx
+│   │           ├── calendar.tsx
+│   │           ├── card.tsx
+│   │           ├── dialog.tsx
+│   │           ├── dropdown-menu.tsx
+│   │           ├── input.tsx
+│   │           ├── label.tsx
+│   │           ├── radio-group.tsx
+│   │           ├── separator.tsx
+│   │           ├── sheet.tsx
+│   │           ├── sidebar.tsx
+│   │           ├── skeleton.tsx
+│   │           ├── table.tsx
+│   │           └── tooltip.tsx
+│   └── hooks/
+│       └── use-mobile.ts
+│
+├── lib/
+│   ├── api.ts
+│   ├── auth-context.tsx
+│   └── utils.ts
+│
+├── public/
+│   ├── figma.svg
+│   ├── flowbite-react.svg
+│   ├── flowbite.svg
+│   ├── images/
+│   │   └── manage.png
+│   ├── pattern-dark.svg
+│   ├── pattern-light.svg
+│   └── vercel.svg
+│
+├── README.md
+│
+├── components.json
+│
+├── eslint.config.mjs
+│
+├── next.config.ts
+│
+├── package.json
+│
+├── package-lock.json
+│
+├── postcss.config.mjs
+│
+├── prettier.config.mjs
+│
+├── tsconfig.json
+```
 
-The frontend expects a RESTful backend with the following endpoints:
+## UI LIbrary
+Some UI Library used here for design
+- [Shadcn](https://ui.shadcn.com/)
+- [Flowbite](https://flowbite.com/)
+- [DaisyUI](https://daisyui.com/)
 
-### Authentication
 
-- `POST /api/users/signup` — Register a new user
-- `POST /api/users/signin` — Login
-- `POST /api/users/change-password` — Change password
-
-### Projects
-
-- `POST /api/projects` — Create a new project (admin/manager)
-- `GET /api/projects` — Get all projects (role-based)
-- `GET /api/projects/:id` — Get project details
-- `PATCH /api/projects/:id` — Update project
-- `DELETE /api/projects/:id` — Delete project
-- `POST /api/projects/:id/respond` — Accept/reject assignment `{ action: "accept" | "reject" }`
-
-### Users
-
-- `GET /api/users/all` — List all users (admin/manager)
-- `PATCH /api/users/:id/role` — Update user role
-
-### Leave
-
-- `POST /api/leave` — Apply for leave
-- `GET /api/leave` — Get user leaves
-- `GET /api/leave/all` — Get all leaves (admin/manager)
-- `PATCH /api/leave/:id/approve` — Approve/reject leave
-
-### Timesheets
-
-- `POST /api/timesheets/create` — Submit timesheet
-- `GET /api/timesheets` — Get user timesheets
-- `GET /api/timesheets/all` — Get all timesheets (admin/manager)
-- `GET /api/timesheets/:id` — Get timesheet details
-- `PATCH /api/timesheets/:id` — Update timesheet
-- `DELETE /api/timesheets/:id` — Delete timesheet
-- `GET /api/timesheets/export/excel` — Export timesheets
-
-### Notices
-
-- `POST /api/notice` — Create notice (admin/manager)
-- `GET /api/notice` — List all notices
-- `PATCH /api/notice/:id` — Update notice
-- `DELETE /api/notice/:id` — Delete notice
 
 ## Usage
 
 - **Admins/Managers:** Manage users, projects, assignments, and notices.
-- **Users:** View assigned projects, accept/reject assignments, submit timesheets, and apply for leave.
+- **Users:** View assigned projects, accept/reject assignments, submit timesheets, and apply for leave
+
+## Screenshots
+Here are some screenshots of project
+- ![image](https://github.com/user-attachments/assets/505f86fe-f3a2-495a-be63-e2c09a85b474)
+- ![image](https://github.com/user-attachments/assets/7df7daa2-dc16-420b-8ee0-e39319a1df2d)
+- ![image](https://github.com/user-attachments/assets/151f57c1-8561-4aa2-ab0b-55a1c3a5986c)
+- ![image](https://github.com/user-attachments/assets/f5535a50-aef8-48ce-b8f3-8833289e01b1)
+- ![image](https://github.com/user-attachments/assets/87ae662a-a853-4b7c-b28c-e6e27020b24f)
+- ![image](https://github.com/user-attachments/assets/6ba6795d-e7f7-45d3-a904-61f9f4f016aa)
+
+
+
+## Contact
+For any queries or support, please reach out:
+**Authors:**
+1. **Abdullah Shishir** - [shishir786](https://github.com/shishir786)
 
 ## Contributing
+Contributions are welcome! Please follow these steps:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-name`).
+3. Make your changes and commit.
+4. Push changes (`git push origin feature-name`).
+5. Open a pull request for review.
 
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+## Acknowledgments
+Thanks to the open-source community for the tools and libraries used in this project.
 
 ## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-[MIT](LICENSE)
+## Support
+For any issues or questions, please open an issue in the repository or contact the project owner.
