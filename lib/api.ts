@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:250/api";
+// const API_URL = "http://localhost:250/api";
+const API_URL = "https://employee-management-system-nest-js-production.up.railway.app/api";
 
 export async function signup(data: {
   name: string;
